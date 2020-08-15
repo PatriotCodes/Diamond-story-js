@@ -1,6 +1,6 @@
 import gridCreator from './gridCreator';
 import isAdjacentCell from './isAdjacentCell';
-import arraySwap from './arraySwap';
+import arraySwap, { arraySwapClean } from './arraySwap';
 import createsMatch from './createsMatch';
 
-export { gridCreator, isAdjacentCell, arraySwap, createsMatch };
+export { gridCreator, isAdjacentCell, arraySwap, arraySwapClean, createsMatch };

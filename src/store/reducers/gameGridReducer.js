@@ -1,5 +1,5 @@
 import * as TYPES from '../actionTypes/gameGridActionTypes';
-import { gridCreator, arraySwap } from '../../utils';
+import { gridCreator, arraySwapClean } from '../../utils';
 
 const initialState = {
   grid: [],
@@ -23,7 +23,7 @@ export default (state = initialState, action) => {
       console.log(action);
       return {
         ...state,
-        grid: arraySwap(state.grid, action.index1, action.index2),
+        grid: arraySwapClean(state.grid, action.index1, action.index2),
       };
 
     default:
