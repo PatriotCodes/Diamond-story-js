@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { swapGems } from '../../store/actions/gameGridActions';
 import Gem from '../Gem';
-import { isAdjacentCell } from '../../utils';
+import { isAdjacentCell, createsMatch } from '../../utils';
 import selectionImage from '../../assets/selected.png';
 
 const GameGrid = ({ gameGrid, gridRows, swapGems }) => {
@@ -11,12 +11,14 @@ const GameGrid = ({ gameGrid, gridRows, swapGems }) => {
 
   const handleGemClick = (index, position) => {
     if (selectedGem) {
-      // if (isAdjacentCell(selectedGem.x, selectedGem.y, x, y)) {
-        // check move >> perform animation
-        swapGems(selectedGem.index, index);
-        setSelectedGem(null);
-        return;
-      // }
+      if (isAdjacentCell(selectedGem.index, index, gridRows)) {
+        const match = createsMatch(selectedGem.index, index, gameGrid, gridRows);
+        if (match) {
+          swapGems(selectedGem.index, index);
+          setSelectedGem(null);
+          return;
+        }
+      }
     }
     setSelectedGem({
       index,
