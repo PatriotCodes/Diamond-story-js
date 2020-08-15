@@ -17,7 +17,7 @@ const Animation = ({ animation, onAnimationComplete }) => {
         />
       );
     default:
-      throw(new Error(`Inappropriate animation type: ${animation.type}`));
+      throw new Error(`Inappropriate animation type: ${animation.type}`);
   }
 };
 

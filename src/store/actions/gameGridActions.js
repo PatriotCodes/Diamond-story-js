@@ -5,8 +5,15 @@ export const initialiseField = fieldTemplate => ({
   fieldTemplate,
 });
 
-export const swapGems = (index1, index2) => ({
-  type: TYPES.SWAP_GEMS,
+export const swapGemsStart = (index1, index2, match, position1, position2) => ({
+  type: TYPES.SWAP_GEMS_START,
   index1,
   index2,
+  match,
+  position1,
+  position2,
+});
+
+export const swapGemsEnd = () => ({
+  type: TYPES.SWAP_GEMS_END,
 });

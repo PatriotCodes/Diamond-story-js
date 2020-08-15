@@ -1,18 +1,22 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Animation from '../Animation';
 
-const AnimationDrawer = ({ animationList }) => {
-  let animationsCompleted = 0;
+const AnimationDrawer = ({ animationList, onComplete }) => {
+  const [animationsCompleted, setAnimationsCompleted] = useState(0);
 
-  const handleAnimationComplete = () => animationsCompleted++;
+  const handleAnimationComplete = () => {
+    setAnimationsCompleted(animationsCompleted + 1);
+  };
 
   useEffect(() => {
-    if (animationsCompleted === animationList.length) {
-      console.log('All animation completed');
+    if (animationsCompleted !== 0 && animationsCompleted === animationList.length) {
+      onComplete();
     }
   }, [animationsCompleted]);
 
-  return animationList.map((item, index) => <Animation key={index} animation={item} onAnimationComplete={handleAnimationComplete} />);
+  return animationList.map((item, index) => (
+    <Animation key={index} animation={item} onAnimationComplete={handleAnimationComplete} />
+  ));
 };
 
 export default AnimationDrawer;

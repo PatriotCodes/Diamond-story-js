@@ -1,40 +1,20 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { swapGems } from '../../store/actions/gameGridActions';
+import { swapGemsStart, swapGemsEnd } from '../../store/actions/gameGridActions';
 import AnimationDrawer from '../../animations/AnimationDrawer';
 import Gem from '../Gem';
-import ANIMATION_TYPES from '../../constants/animations';
 import { isAdjacentCell, createsMatch } from '../../utils';
 import selectionImage from '../../assets/selected.png';
 
-const GameGrid = ({ gameGrid, gridRows, swapGems }) => {
+const GameGrid = ({ gameGrid, gridRows, swapGemsStart, swapGemsEnd, gemSize, animationsList }) => {
   const [selectedGem, setSelectedGem] = useState(null);
-  const [animations, setAnimations] = useState([]);
-  const INITIAL_GEM_SIZE = (window.innerHeight * 0.6) / gridRows;
 
   const handleGemClick = (index, position) => {
     if (selectedGem) {
       if (isAdjacentCell(selectedGem.index, index, gridRows)) {
         const match = createsMatch(selectedGem.index, index, gameGrid, gridRows);
         if (match) {
-          setAnimations([{
-            type: ANIMATION_TYPES.move,
-            gemType: gameGrid[selectedGem.index].gemType,
-            gemSize: INITIAL_GEM_SIZE,
-            fromX: selectedGem.position.x,
-            toX: position.x,
-            fromY: selectedGem.position.y,
-            toY: position.y,
-          }, {
-            type: ANIMATION_TYPES.move,
-            gemType: gameGrid[index].gemType,
-            gemSize: INITIAL_GEM_SIZE,
-            fromX: position.x,
-            toX: selectedGem.position.x,
-            fromY: position.y,
-            toY: selectedGem.position.y,
-          }]);
-          swapGems(selectedGem.index, index);
+          swapGemsStart(selectedGem.index, index, match, selectedGem.position, position);
           setSelectedGem(null);
           return;
         }
@@ -44,6 +24,11 @@ const GameGrid = ({ gameGrid, gridRows, swapGems }) => {
       index,
       position,
     });
+  };
+
+  const handleAnimationsComplete = () => {
+    swapGemsEnd();
+    console.log('animations done');
   };
 
   return (
@@ -56,15 +41,15 @@ const GameGrid = ({ gameGrid, gridRows, swapGems }) => {
           key={id}
           gemType={gemType}
           onClick={handleGemClick}
-          size={INITIAL_GEM_SIZE}
+          size={gemSize}
         />
       ))}
       {selectedGem && (
         <img
           alt=""
           src={selectionImage}
-          width={INITIAL_GEM_SIZE}
-          height={INITIAL_GEM_SIZE}
+          width={gemSize}
+          height={gemSize}
           style={{
             position: 'absolute',
             left: selectedGem.position.x,
@@ -72,13 +57,14 @@ const GameGrid = ({ gameGrid, gridRows, swapGems }) => {
           }}
         />
       )}
-      <AnimationDrawer animationList={animations} />
+      <AnimationDrawer animationList={animationsList} onComplete={handleAnimationsComplete} />
     </div>
   );
 };
 
 const mapDispatchToProps = {
-  swapGems,
+  swapGemsStart,
+  swapGemsEnd,
 };
 
 export default connect(() => ({}), mapDispatchToProps)(GameGrid);
