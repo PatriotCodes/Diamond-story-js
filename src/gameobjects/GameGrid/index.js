@@ -57,7 +57,9 @@ const GameGrid = ({ gameGrid, gridRows, swapGemsStart, swapGemsEnd, gemSize, ani
           }}
         />
       )}
-      <AnimationDrawer animationList={animationsList} onComplete={handleAnimationsComplete} />
+      {Boolean(animationsList.length) && (
+        <AnimationDrawer animationList={animationsList} onComplete={handleAnimationsComplete} />
+      )}
     </div>
   );
 };

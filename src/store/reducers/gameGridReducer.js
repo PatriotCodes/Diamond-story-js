@@ -32,6 +32,7 @@ export default (state = initialState, action) => {
       };
 
     case TYPES.SWAP_GEMS_START:
+
       return {
         ...state,
         grid: arraySwapClean(state.grid, action.index1, action.index2),
@@ -76,6 +77,7 @@ export default (state = initialState, action) => {
           }
           return item;
         }),
+        swapGems: initialState.swapGems,
         animationsList: [],
       };
 
