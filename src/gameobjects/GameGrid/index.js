@@ -14,7 +14,13 @@ const GameGrid = ({ gameGrid, gridRows, swapGemsStart, swapGemsEnd, gemSize, ani
       if (isAdjacentCell(selectedGem.index, index, gridRows)) {
         const match = createsMatch(selectedGem.index, index, gameGrid, gridRows);
         if (match) {
-          swapGemsStart(selectedGem.index, index, match, selectedGem.position, position);
+          swapGemsStart(
+            selectedGem.index,
+            index,
+            match,
+            selectedGem.position,
+            position,
+          );
           setSelectedGem(null);
           return;
         }
@@ -32,9 +38,16 @@ const GameGrid = ({ gameGrid, gridRows, swapGemsStart, swapGemsEnd, gemSize, ani
   };
 
   return (
-    <div>
-      {gameGrid.map(({ gemType, id }, index) => (
+    <div
+      style={{
+        position: 'relative',
+        width: `calc(${gemSize}px * ${gridRows})`,
+        height: `calc(${gemSize}px * ${gridRows})`,
+      }}
+    >
+      {gameGrid.map(({ gemType, id, isPlayable }, index) => (
         <Gem
+          isPlayable={isPlayable}
           index={index}
           x={index % gridRows}
           y={Math.floor(index / gridRows)}

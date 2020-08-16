@@ -14,6 +14,7 @@ const initialTemplate = gridTemplate =>
         gemType: gridTemplate[index][index2].hasGem
           ? randomProperty(_.omit(GEM_TYPES, [GEM_TYPES.NONE, GEM_TYPES.SUPER]))
           : GEM_TYPES.NONE,
+        isPlayable: gridTemplate[index][index2].hasGem,
         id: uuid(),
       };
     }),
