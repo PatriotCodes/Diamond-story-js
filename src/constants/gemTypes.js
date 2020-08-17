@@ -15,6 +15,12 @@ const GEM_TYPES = {
   SUPER: 'SUPER',
 };
 
+const SPECIAL_GEM_TYPES = {
+  FIRE: 'FIRE',
+  CROSS: 'CROSS',
+  SUPER: 'SUPER',
+};
+
 export const gemImagesByType = {
   [GEM_TYPES.GREEN]: greenGemImage,
   [GEM_TYPES.BLUE]: blueGemImage,

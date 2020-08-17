@@ -1,12 +1,19 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { swapGemsStart, swapGemsEnd } from '../../store/actions/gameGridActions';
+import { swapGems, processAnimationEnd } from '../../store/actions/gameGridActions';
 import AnimationDrawer from '../../animations/AnimationDrawer';
 import Gem from '../Gem';
 import { isAdjacentCell, createsMatch } from '../../utils';
 import selectionImage from '../../assets/selected.png';
 
-const GameGrid = ({ gameGrid, gridRows, swapGemsStart, swapGemsEnd, gemSize, animationsList }) => {
+const GameGrid = ({
+  gameGrid,
+  gridRows,
+  swapGems,
+  processAnimationEnd,
+  gemSize,
+  animationsList,
+}) => {
   const [selectedGem, setSelectedGem] = useState(null);
 
   const handleGemClick = (index, position) => {
@@ -14,13 +21,7 @@ const GameGrid = ({ gameGrid, gridRows, swapGemsStart, swapGemsEnd, gemSize, ani
       if (isAdjacentCell(selectedGem.index, index, gridRows)) {
         const match = createsMatch(selectedGem.index, index, gameGrid, gridRows);
         if (match) {
-          swapGemsStart(
-            selectedGem.index,
-            index,
-            match,
-            selectedGem.position,
-            position,
-          );
+          swapGems(selectedGem.index, index, match, selectedGem.position, position);
           setSelectedGem(null);
           return;
         }
@@ -32,29 +33,24 @@ const GameGrid = ({ gameGrid, gridRows, swapGemsStart, swapGemsEnd, gemSize, ani
     });
   };
 
-  const handleAnimationsComplete = () => {
-    swapGemsEnd();
-    console.log('animations done');
-  };
-
   return (
     <div
       style={{
         position: 'relative',
         width: `calc(${gemSize}px * ${gridRows})`,
         height: `calc(${gemSize}px * ${gridRows})`,
+        pointerEvents: animationsList.length ? 'none' : 'all',
       }}
     >
       {gameGrid.map(({ gemType, id, isPlayable }, index) => (
         <Gem
           isPlayable={isPlayable}
           index={index}
-          x={index % gridRows}
-          y={Math.floor(index / gridRows)}
           key={id}
           gemType={gemType}
           onClick={handleGemClick}
           size={gemSize}
+          gridRows={gridRows}
         />
       ))}
       {selectedGem && (
@@ -71,15 +67,15 @@ const GameGrid = ({ gameGrid, gridRows, swapGemsStart, swapGemsEnd, gemSize, ani
         />
       )}
       {Boolean(animationsList.length) && (
-        <AnimationDrawer animationList={animationsList} onComplete={handleAnimationsComplete} />
+        <AnimationDrawer animationList={animationsList} onComplete={processAnimationEnd} />
       )}
     </div>
   );
 };
 
 const mapDispatchToProps = {
-  swapGemsStart,
-  swapGemsEnd,
+  swapGems,
+  processAnimationEnd,
 };
 
 export default connect(() => ({}), mapDispatchToProps)(GameGrid);

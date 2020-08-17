@@ -1,6 +1,7 @@
 import React from 'react';
 import ANIMATION_TYPES from '../../constants/animations';
 import MoveAnimation from '../MoveAnimation';
+import DestroyAnimation from '../DestroyAnimation';
 
 const Animation = ({ animation, onAnimationComplete }) => {
   switch (animation.type) {
@@ -16,6 +17,17 @@ const Animation = ({ animation, onAnimationComplete }) => {
           onAnimationComplete={onAnimationComplete}
         />
       );
+
+    case ANIMATION_TYPES.destroy:
+      return (
+        <DestroyAnimation
+          position={animation.position}
+          gemType={animation.gemType}
+          gemSize={animation.gemSize}
+          onAnimationComplete={onAnimationComplete}
+        />
+      );
+
     default:
       throw new Error(`Inappropriate animation type: ${animation.type}`);
   }
