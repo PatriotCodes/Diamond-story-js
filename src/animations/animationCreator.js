@@ -29,22 +29,14 @@ const createDestroyAnimation = (gemType, gemSize, position) => ({
  * @param match {object}
  * @param gemSize {number}
  * @param matchItem {object}
+ * @param matchType {string}
  * @returns {array}
  *
  * This function is responsible for choosing proper destroy match animation
  * for now no cross animation is created only 3/4/5 length based
  */
-const createMatchDestroyAnimation = (match, gemSize, matchItem) => {
-  switch (match.length) {
-    case 3:
-      return match.map(item => createDestroyAnimation(item.gemType, gemSize, item.position));
-    case 4:
-      return null;
-
-    // super gem:
-    default:
-      return null;
-  }
+const createMatchDestroyAnimation = (match, gemSize, matchItem, matchType) => {
+  return match.map(item => createDestroyAnimation(item.gemType, gemSize, item.position));
 };
 
 export default {

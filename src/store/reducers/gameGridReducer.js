@@ -1,4 +1,5 @@
 import * as TYPES from '../actionTypes/gameGridActionTypes';
+import _ from 'lodash';
 import GEM_TYPES from '../../constants/gemTypes';
 import { STORE_ANIMATION_PROCESS } from '../../constants/animations';
 import { gridCreator, arraySwapClean, getPositionByIndex } from '../../utils';
@@ -25,15 +26,24 @@ const initialState = {
   gemSize: 0,
 };
 
+const getGemTypeForMatchDestroyAnimation = (state, index) => {
+  switch (index) {
+    case state.swapGems.matchItem.index:
+      return state.swapGems.matchItem.gemType;
+    case state.swapGems.swappedItem.index:
+      return state.swapGems.swappedItem.gemType;
+    default:
+      return state.grid[index].gemType;
+  }
+};
+
 const processAnimationEnd = state => {
-  console.log(getPositionByIndex(2, state.gemSize, state.gridRows, true))
   switch (state.animationProcess) {
     case STORE_ANIMATION_PROCESS.swap:
       return {
         ...state,
-        // TODO {refactor}: Find a way to not use map
         grid: state.grid.map((item, index) => {
-          if (state.swapGems.match.includes(index)) {
+          if (_.flatten(state.swapGems.match.map(item => item.match)).includes(index)) {
             return {
               ...item,
               gemType: GEM_TYPES.NONE,
@@ -45,19 +55,42 @@ const processAnimationEnd = state => {
               gemType: state.swapGems.swappedItem.gemType,
             };
           }
+          if (index === state.swapGems.matchItem.index) {
+            return {
+              ...item,
+              gemType: state.swapGems.matchItem.gemType,
+            };
+          }
           return item;
         }),
         swapGems: initialState.swapGems,
-        animationsList: animationCreator.createMatchDestroyAnimation(
-          state.swapGems.match.map(item => ({
-            position: getPositionByIndex(item, state.gridRows, state.gemSize),
-            gemType: state.grid[item].gemType,
-          })),
-          state.gemSize,
-          state.swapGems.matchItem,
+        animationsList: _.flatten(
+          state.swapGems.match.map(match =>
+            animationCreator.createMatchDestroyAnimation(
+              match.match.map(item => ({
+                position: getPositionByIndex(item, state.gridRows, state.gemSize),
+                gemType: getGemTypeForMatchDestroyAnimation(state, item),
+              })),
+              state.gemSize,
+              state.swapGems.matchItem,
+              match.matchType,
+            ),
+          ),
         ),
         animationProcess: STORE_ANIMATION_PROCESS.destroy,
       };
+
+    case STORE_ANIMATION_PROCESS.destroy:
+      // START FALLDOWN
+      return {
+        ...state,
+        animationsList: [],
+        animationProcess: STORE_ANIMATION_PROCESS.fallDown,
+      };
+
+    // CHECK FOR MATCHES
+    case STORE_ANIMATION_PROCESS.fallDown:
+      return state;
 
     default:
       return state;

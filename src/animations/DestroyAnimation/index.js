@@ -14,6 +14,7 @@ const DestroyAnimation = ({ position, gemSize, gemType, onAnimationComplete }) =
         position: 'absolute',
         left: position.x,
         top: position.y,
+        transformOrigin: 'initial',
       }}
       transition={{ duration: ANIMATION_SPEEDS.destroyAnimation }}
       initial={{ scale: 1 }}
