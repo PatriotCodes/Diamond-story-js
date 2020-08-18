@@ -14,8 +14,8 @@ const AnimationDrawer = ({ animationList, onComplete }) => {
     }
   }, [animationsCompleted]);
 
-  return animationList.map((item, index) => (
-    <Animation key={index} animation={item} onAnimationComplete={handleAnimationComplete} />
+  return animationList.map(item => (
+    <Animation key={item.id} animation={item} onAnimationComplete={handleAnimationComplete} />
   ));
 };
 

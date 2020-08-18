@@ -51,7 +51,7 @@ const getMatchType = match => {
     case 5:
       return MATCH_TYPES.match5;
     default:
-      throw `inappropriate match length: ${match.length}`;
+      throw new Error(`inappropriate match length: ${match.length}`);
   }
 };
 
@@ -62,23 +62,37 @@ const checkMatch = (fromIndex, toIndex, grid, rowLength) => {
     return {
       matchType: MATCH_TYPES.crossMatch,
       match: horizontalMatch.concat(verticalMatch),
+      matchItem: {
+        index: toIndex,
+        ...grid[fromIndex],
+        isSpecial: true,
+      },
     };
   } else if (horizontalMatch.length >= 3) {
     return {
       matchType: getMatchType(horizontalMatch),
       match: horizontalMatch,
+      matchItem: {
+        index: toIndex,
+        ...grid[fromIndex],
+        isSpecial: getMatchType(horizontalMatch) !== MATCH_TYPES.match3,
+      },
     };
   } else if (verticalMatch.length >= 3) {
     return {
       matchType: getMatchType(verticalMatch),
       match: verticalMatch,
+      matchItem: {
+        index: toIndex,
+        ...grid[fromIndex],
+        isSpecial: getMatchType(verticalMatch) !== MATCH_TYPES.match3,
+      },
     };
   } else {
     return false;
   }
 };
 
-// TODO: concat is not an option as 3 & 3 wil create a 6 item match
 export default (fromIndex, toIndex, grid, rowLength) => {
   const match1 = checkMatch(fromIndex, toIndex, grid, rowLength);
   const match2 = checkMatch(toIndex, fromIndex, grid, rowLength);

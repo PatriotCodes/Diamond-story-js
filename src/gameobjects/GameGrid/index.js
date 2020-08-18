@@ -40,9 +40,10 @@ const GameGrid = ({
         width: `calc(${gemSize}px * ${gridRows})`,
         height: `calc(${gemSize}px * ${gridRows})`,
         pointerEvents: animationsList.length ? 'none' : 'all',
+        userSelect: 'none',
       }}
     >
-      {gameGrid.map(({ gemType, id, isPlayable }, index) => (
+      {gameGrid.map(({ gemType, id, isPlayable, isPowered, isCrossPowered }, index) => (
         <Gem
           isPlayable={isPlayable}
           index={index}
@@ -51,6 +52,8 @@ const GameGrid = ({
           onClick={handleGemClick}
           size={gemSize}
           gridRows={gridRows}
+          isPowered={isPowered}
+          isCrossPowered={isCrossPowered}
         />
       ))}
       {selectedGem && (

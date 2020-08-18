@@ -1,5 +1,6 @@
 import ANIMATION_TYPES from '../constants/animations';
 import MATCH_TYPES from '../constants/matchTypes';
+import uuid from 'react-uuid';
 import { getPositionByIndex } from './index';
 
 const createMoveAnimation = (gemType, gemSize, position1, position2) => ({
@@ -10,6 +11,7 @@ const createMoveAnimation = (gemType, gemSize, position1, position2) => ({
   toX: position2.x,
   fromY: position1.y,
   toY: position2.y,
+  id: uuid(),
 });
 
 const createSwapAnimation = (gemType1, gemType2, gemSize, position1, position2) => {
@@ -24,6 +26,7 @@ const createDestroyAnimation = (gemType, gemSize, position) => ({
   gemType: gemType,
   gemSize: gemSize,
   position: position,
+  id: uuid(),
 });
 
 /**

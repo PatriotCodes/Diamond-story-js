@@ -1,6 +1,7 @@
 import * as TYPES from '../actionTypes/gameGridActionTypes';
 import _ from 'lodash';
 import GEM_TYPES from '../../constants/gemTypes';
+import MATCH_TYPES from '../../constants/matchTypes';
 import { STORE_ANIMATION_PROCESS } from '../../constants/animations';
 import { gridCreator, arraySwapClean, getPositionByIndex, animationCreator } from '../../utils';
 
@@ -70,7 +71,7 @@ const processAnimationEnd = state => {
                 gemType: getGemTypeForMatchDestroyAnimation(state, item),
               })),
               state.gemSize,
-              state.swapGems.matchItem,
+              match.matchItem,
               match.matchType,
               state.gridRows,
             ),
@@ -80,9 +81,40 @@ const processAnimationEnd = state => {
       };
 
     case STORE_ANIMATION_PROCESS.destroy:
-      // START FALLDOWN
+      const specialGems = state.swapGems.match.filter(item => item.matchItem.isSpecial);
       return {
         ...state,
+        grid: !!specialGems.length
+          ? state.grid.map((item, index) => {
+              const specialGem = _.find(specialGems, { matchItem: { index: index } });
+              if (specialGem) {
+                switch (specialGem.matchType) {
+                  case MATCH_TYPES.match4:
+                    return {
+                      ...item,
+                      gemType: specialGem.matchItem.gemType,
+                      isPowered: true,
+                    };
+                  case MATCH_TYPES.match5:
+                    return {
+                      ...item,
+                      gemType: GEM_TYPES.SUPER,
+                    };
+                  case MATCH_TYPES.crossMatch:
+                    return {
+                      ...item,
+                      gemType: specialGem.matchItem.gemType,
+                      isCrossPowered: true,
+                    };
+                  default:
+                    throw new Error(
+                      `Special can't be a part of such match type: ${specialGem.matchType}`,
+                    );
+                }
+              }
+              return item;
+            })
+          : state.grid,
         animationsList: [],
         animationProcess: STORE_ANIMATION_PROCESS.fallDown,
         swapGems: initialState.swapGems,

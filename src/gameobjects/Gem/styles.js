@@ -12,6 +12,18 @@ export default makeStyles({
     userSelect: 'none',
     '& > img': {
       pointerEvents: 'none',
+      position: 'absolute',
+      zIndex: 1,
     },
+  }),
+  effectDiv: props => ({
+    width: 0,
+    height: 0,
+    left: '50%',
+    position: 'absolute',
+    top: '50%',
+    transform: 'translate(-50%, -50%)',
+    boxShadow: '0px 0px 37px 35px rgba(255,0,255,0.5)',
+    zIndex: 2,
   }),
 });
