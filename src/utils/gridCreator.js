@@ -25,6 +25,11 @@ export default gridTemplate => {
 
   for (let indexLine = 0; indexLine < gridTemplate.length; indexLine++) {
     for (let index = 0; index < gridTemplate[indexLine].length; index++) {
+      if (gridTemplate[indexLine][index].gemType) {
+        init[indexLine][index].gemType = gridTemplate[indexLine][index].gemType;
+        continue;
+      }
+
       if (gridTemplate[indexLine][index].hasGem) {
         const prevLineItem = init[indexLine - 2]?.[index]?.gemType;
         const prevColItem = init[indexLine]?.[index - 2]?.gemType;

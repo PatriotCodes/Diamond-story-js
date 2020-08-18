@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import level_01 from '../../levels/level_01';
+import levelCreator, { exampleTemplate } from '../../levels/levelCreator';
 import { initialiseField } from '../../store/actions/gameGridActions';
 import GameGrid from '../../gameobjects/GameGrid';
 
@@ -13,7 +13,7 @@ const GameScreen = ({
   animationsList,
 }) => {
   useEffect(() => {
-    initialiseField(level_01.gridTemplate);
+    initialiseField(levelCreator(exampleTemplate).gridTemplate);
   }, []);
 
   return (

@@ -10,7 +10,7 @@ export const STORE_ANIMATION_PROCESS = {
 };
 
 export const ANIMATION_SPEEDS = {
-  moveAnimation: 0.3,
+  moveAnimation: 2.3,
   destroyAnimation: 0.3,
 };
 

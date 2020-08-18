@@ -1,4 +1,6 @@
 import ANIMATION_TYPES from '../constants/animations';
+import MATCH_TYPES from '../constants/matchTypes';
+import { getPositionByIndex } from './index';
 
 const createMoveAnimation = (gemType, gemSize, position1, position2) => ({
   type: ANIMATION_TYPES.move,
@@ -30,13 +32,20 @@ const createDestroyAnimation = (gemType, gemSize, position) => ({
  * @param gemSize {number}
  * @param matchItem {object}
  * @param matchType {string}
+ * @param gridRows {number}
  * @returns {array}
  *
  * This function is responsible for choosing proper destroy match animation
- * for now no cross animation is created only 3/4/5 length based
  */
-const createMatchDestroyAnimation = (match, gemSize, matchItem, matchType) => {
-  return match.map(item => createDestroyAnimation(item.gemType, gemSize, item.position));
+const createMatchDestroyAnimation = (match, gemSize, matchItem, matchType, gridRows) => {
+  if (matchType === MATCH_TYPES.match3) {
+    return match.map(item => createDestroyAnimation(item.gemType, gemSize, item.position));
+  } else {
+    const matchItemPosition = getPositionByIndex(matchItem.index, gridRows, gemSize);
+    return match.map(item =>
+      createMoveAnimation(item.gemType, gemSize, item.position, matchItemPosition),
+    );
+  }
 };
 
 export default {

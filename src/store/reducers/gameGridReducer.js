@@ -2,8 +2,7 @@ import * as TYPES from '../actionTypes/gameGridActionTypes';
 import _ from 'lodash';
 import GEM_TYPES from '../../constants/gemTypes';
 import { STORE_ANIMATION_PROCESS } from '../../constants/animations';
-import { gridCreator, arraySwapClean, getPositionByIndex } from '../../utils';
-import animationCreator from '../../animations/animationCreator';
+import { gridCreator, arraySwapClean, getPositionByIndex, animationCreator } from '../../utils';
 
 const initialState = {
   grid: [],
@@ -63,7 +62,6 @@ const processAnimationEnd = state => {
           }
           return item;
         }),
-        swapGems: initialState.swapGems,
         animationsList: _.flatten(
           state.swapGems.match.map(match =>
             animationCreator.createMatchDestroyAnimation(
@@ -74,6 +72,7 @@ const processAnimationEnd = state => {
               state.gemSize,
               state.swapGems.matchItem,
               match.matchType,
+              state.gridRows,
             ),
           ),
         ),
@@ -86,6 +85,7 @@ const processAnimationEnd = state => {
         ...state,
         animationsList: [],
         animationProcess: STORE_ANIMATION_PROCESS.fallDown,
+        swapGems: initialState.swapGems,
       };
 
     // CHECK FOR MATCHES

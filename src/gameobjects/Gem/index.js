@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import GEM_TYPES, { gemImagesByType } from '../../constants/gemTypes';
 import { getPositionByIndex } from '../../utils';
 import useStyles from './styles';
 
 const Gem = ({ index, gemType, gridRows, size, onClick, isPlayable }) => {
-  const position = getPositionByIndex(index, gridRows, size);
+  const position = useMemo(() => getPositionByIndex(index, gridRows, size), [
+    index,
+    gridRows,
+    size,
+  ]);
 
   const classes = useStyles({
     position,
