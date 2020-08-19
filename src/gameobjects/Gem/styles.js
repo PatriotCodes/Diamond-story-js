@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/styles';
+import { pickGemColor } from '../../styles/colors';
 
 export default makeStyles({
   root: props => ({
@@ -23,7 +24,7 @@ export default makeStyles({
     position: 'absolute',
     top: '50%',
     transform: 'translate(-50%, -50%)',
-    boxShadow: '0px 0px 37px 35px rgba(255,0,255,0.5)',
+    boxShadow: `0px 0px 10px 20px rgba(${pickGemColor(props.gemType)}, 0.6)`,
     zIndex: 2,
   }),
 });

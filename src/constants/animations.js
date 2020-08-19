@@ -12,6 +12,7 @@ export const STORE_ANIMATION_PROCESS = {
 export const ANIMATION_SPEEDS = {
   moveAnimation: 0.3,
   destroyAnimation: 0.3,
+  poweredPulse: 0.8,
 };
 
 export default ANIMATION_TYPES;

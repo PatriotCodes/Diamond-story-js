@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
+import { ANIMATION_SPEEDS } from '../../constants/animations';
 import GEM_TYPES, { gemImagesByType } from '../../constants/gemTypes';
 import { getPositionByIndex } from '../../utils';
 import useStyles from './styles';
@@ -24,6 +25,7 @@ const Gem = ({
     position,
     size,
     isPlayable,
+    gemType,
   });
 
   return (
@@ -35,9 +37,9 @@ const Gem = ({
       {(isPowered || isCrossPowered) && (
         <motion.div
           className={classes.effectDiv}
-          transition={{ duration: 1, loop: Infinity }}
-          initial={{ opacity: 0.5 }}
-          animate={{ opacity: [0.5, 1, 0.5] }}
+          transition={{ duration: ANIMATION_SPEEDS.poweredPulse, loop: Infinity }}
+          initial={{ opacity: 0.6 }}
+          animate={{ opacity: [0.6, 1, 0.6] }}
         />
       )}
     </div>
