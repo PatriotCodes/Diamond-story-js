@@ -1,53 +1,36 @@
-import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
-import levelCreator, { exampleTemplate } from '../../levels/levelCreator';
-import { initialiseField } from '../../store/actions/gameGridActions';
-import GameGrid from '../../gameobjects/GameGrid';
+import React, { useEffect, useState } from 'react';
+import EVENTS from '../../events';
+import TopBar from './TopBar';
+import BottomBar from './BottomBar';
+import PhaserReactGame from '../../game/PhaserReactGame';
+import { exampleTemplate } from '../../levels/levelCreator';
+import { generateConfig } from '../../constants/gameConfig';
 
-const GameScreen = ({
-  gameGrid,
-  gridRows,
-  gameGridReady,
-  initialiseField,
-  gemSize,
-  animationsList,
-}) => {
+export const gameConfig = generateConfig(exampleTemplate);
+
+const GameScreen = () => {
+  const [game, setGame] = useState(null);
+  const [moves, setMoves] = useState(0);
+
   useEffect(() => {
-    initialiseField(levelCreator(exampleTemplate).gridTemplate);
+    const game = new PhaserReactGame(gameConfig, { setMoves });
+    setGame(game);
+    return () => {
+      game.destroy();
+    };
   }, []);
 
+  const handleSpecialPowerClick = powerType => {
+    game.events.emit(EVENTS.selectSpecialPower, powerType);
+  };
+
   return (
-    <div
-      style={{
-        width: '100%',
-        height: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
-      {gameGridReady && (
-        <GameGrid
-          gameGrid={gameGrid}
-          gridRows={gridRows}
-          gemSize={gemSize}
-          animationsList={animationsList}
-        />
-      )}
+    <div>
+      <TopBar moves={moves} />
+      <div id="phaser" />
+      <BottomBar onClickSpecialPower={handleSpecialPowerClick} />
     </div>
   );
 };
 
-const mapStateToProps = state => ({
-  gameGrid: state.gameGridReducer.grid,
-  gridRows: state.gameGridReducer.gridRows,
-  gemSize: state.gameGridReducer.gemSize,
-  gameGridReady: state.gameGridReducer.isInitialised,
-  animationsList: state.gameGridReducer.animationsList,
-});
-
-const mapDispatchToProps = {
-  initialiseField,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(GameScreen);
+export default GameScreen;

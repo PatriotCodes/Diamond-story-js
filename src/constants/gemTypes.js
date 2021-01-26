@@ -15,7 +15,7 @@ const GEM_TYPES = {
   SUPER: 'SUPER',
 };
 
-const SPECIAL_GEM_TYPES = {
+export const SPECIAL_GEM_TYPES = {
   FIRE: 'FIRE',
   CROSS: 'CROSS',
   SUPER: 'SUPER',

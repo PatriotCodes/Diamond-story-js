@@ -1,16 +1,8 @@
 import React from 'react';
-import { Provider } from 'react-redux';
-import GameScreen from './screens/GameScreen';
-import configureStore from './store';
+import GameScreen from "./screens/GameScreen";
 
 const App = () => {
-  const store = configureStore();
-
-  return (
-    <Provider store={store}>
-      <GameScreen />
-    </Provider>
-  );
-};
+  return <GameScreen />
+}
 
 export default App;
